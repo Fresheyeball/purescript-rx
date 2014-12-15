@@ -128,6 +128,15 @@ module Prelude.Unsafe where
 import Prim ()
 import Prelude ()
 foreign import unsafeIndex :: forall a. [a] -> Prim.Number -> a
+module Global where
+import Prim ()
+import Prelude ()
+foreign import readFloat :: Prim.String -> Prim.Number
+foreign import readInt :: Prim.Number -> Prim.String -> Prim.Number
+foreign import isFinite :: Prim.Number -> Prim.Boolean
+foreign import infinity :: Prim.Number
+foreign import isNaN :: Prim.Number -> Prim.Boolean
+foreign import nan :: Prim.Number
 module Data.Function where
 import Prim ()
 import Prelude ()
@@ -170,7 +179,7 @@ import Data.Foreign.EasyFFI ()
 import Prim ()
 import Prelude ()
 foreign import unsafeForeignProcedure :: forall a. [Prim.String] -> Prim.String -> a
-foreign import unsafeForeignFunction :: forall t1214. [Prim.String] -> Prim.String -> t1214
+foreign import unsafeForeignFunction :: forall t1224. [Prim.String] -> Prim.String -> t1224
 module Data.Eq where
 import Data.Eq ()
 import Prelude ()
@@ -180,6 +189,23 @@ newtype Ref (a :: *) = Ref a
 foreign import liftRef :: forall a b. (a -> a -> b) -> Data.Eq.Ref a -> Data.Eq.Ref a -> b
 foreign import instance eqRef :: Prelude.Eq (Data.Eq.Ref a)
 foreign import instance functorRef :: Prelude.Functor Data.Eq.Ref
+module Data.Char where
+import Prelude ()
+import Prim ()
+import Prelude ()
+data Char
+foreign import toCharCode :: Data.Char.Char -> Prim.Number
+foreign import fromCharCode :: Prim.Number -> Data.Char.Char
+foreign import charString :: Data.Char.Char -> Prim.String
+foreign import instance eqChar :: Prelude.Eq Data.Char.Char
+foreign import instance ordChar :: Prelude.Ord Data.Char.Char
+foreign import instance showChar :: Prelude.Show Data.Char.Char
+module Data.String.Unsafe where
+import Prim ()
+import Prelude ()
+import Data.Char ()
+foreign import charCodeAt :: Prim.Number -> Prim.String -> Prim.Number
+foreign import charAt :: Prim.Number -> Prim.String -> Data.Char.Char
 module DOM where
 import Prim ()
 import Prelude ()
@@ -205,6 +231,25 @@ foreign import instance applyEff :: Prelude.Apply (Control.Monad.Eff.Eff e)
 foreign import instance applicativeEff :: Prelude.Applicative (Control.Monad.Eff.Eff e)
 foreign import instance bindEff :: Prelude.Bind (Control.Monad.Eff.Eff e)
 foreign import instance monadEff :: Prelude.Monad (Control.Monad.Eff.Eff e)
+module Control.Monad.Eff.Ref where
+import Control.Monad.Eff.Ref ()
+import Prelude ()
+import Prim ()
+import Prelude ()
+import Control.Monad.Eff ()
+foreign import data RefVal :: * -> *
+foreign import data Ref :: !
+foreign import writeRef :: forall s r. Control.Monad.Eff.Ref.RefVal s -> s -> Control.Monad.Eff.Eff (ref :: Control.Monad.Eff.Ref.Ref | r) Prelude.Unit
+foreign import modifyRef :: forall s r. Control.Monad.Eff.Ref.RefVal s -> (s -> s) -> Control.Monad.Eff.Eff (ref :: Control.Monad.Eff.Ref.Ref | r) Prelude.Unit
+foreign import modifyRef' :: forall s b r. Control.Monad.Eff.Ref.RefVal s -> (s -> { retVal :: b, newState :: s }) -> Control.Monad.Eff.Eff (ref :: Control.Monad.Eff.Ref.Ref | r) b
+foreign import readRef :: forall s r. Control.Monad.Eff.Ref.RefVal s -> Control.Monad.Eff.Eff (ref :: Control.Monad.Eff.Ref.Ref | r) s
+foreign import newRef :: forall s r. s -> Control.Monad.Eff.Eff (ref :: Control.Monad.Eff.Ref.Ref | r) (Control.Monad.Eff.Ref.RefVal s)
+module Control.Monad.Eff.Ref.Unsafe where
+import Prim ()
+import Prelude ()
+import Control.Monad.Eff ()
+import Control.Monad.Eff.Ref ()
+foreign import unsafeRunRef :: forall eff a. Control.Monad.Eff.Eff (ref :: Control.Monad.Eff.Ref.Ref | eff) a -> Control.Monad.Eff.Eff eff a
 module Control.Monad.Eff.Unsafe where
 import Prim ()
 import Prelude ()
@@ -228,27 +273,27 @@ import Prim ()
 import Prelude ()
 import Data.Function ()
 import Control.Monad.Eff ()
-foreign import instantiate5 :: forall t1977 t1978 t1979 t1980 t1981 t1990 t1992. Prim.String -> t1981 -> t1980 -> t1979 -> t1978 -> t1977 -> Control.Monad.Eff.Eff t1992 t1990
-foreign import instantiate4 :: forall t2005 t2006 t2007 t2008 t2016 t2017. Prim.String -> t2008 -> t2007 -> t2006 -> t2005 -> Control.Monad.Eff.Eff t2017 t2016
-foreign import instantiate3 :: forall t2029 t2030 t2031 t2038 t2039. Prim.String -> t2031 -> t2030 -> t2029 -> Control.Monad.Eff.Eff t2038 t2039
-foreign import instantiate2 :: forall t2049 t2050 t2056 t2057. Prim.String -> t2050 -> t2049 -> Control.Monad.Eff.Eff t2056 t2057
-foreign import instantiate1 :: forall t2065 t2070 t2071. Prim.String -> t2065 -> Control.Monad.Eff.Eff t2070 t2071
+foreign import instantiate5 :: forall t2063 t2064 t2065 t2066 t2067 t2076 t2078. Prim.String -> t2067 -> t2066 -> t2065 -> t2064 -> t2063 -> Control.Monad.Eff.Eff t2078 t2076
+foreign import instantiate4 :: forall t2091 t2092 t2093 t2094 t2102 t2103. Prim.String -> t2094 -> t2093 -> t2092 -> t2091 -> Control.Monad.Eff.Eff t2103 t2102
+foreign import instantiate3 :: forall t2115 t2116 t2117 t2124 t2125. Prim.String -> t2117 -> t2116 -> t2115 -> Control.Monad.Eff.Eff t2124 t2125
+foreign import instantiate2 :: forall t2135 t2136 t2142 t2143. Prim.String -> t2136 -> t2135 -> Control.Monad.Eff.Eff t2142 t2143
+foreign import instantiate1 :: forall t2151 t2156 t2157. Prim.String -> t2151 -> Control.Monad.Eff.Eff t2156 t2157
 foreign import instantiate0 :: forall a e. Prim.String -> Control.Monad.Eff.Eff e a
-foreign import setter :: forall t1679 t1680 t1681. Prim.String -> t1681 -> t1680 -> t1679
-foreign import modifier :: forall t1694 t1695 t1696. Prim.String -> t1696 -> t1695 -> t1694
-foreign import getter :: forall t2077 t2078. Prim.String -> t2078 -> t2077
-foreign import method5Eff :: forall t1714 t1715 t1716 t1717 t1718 t1719 t1729 t1730. Prim.String -> t1719 -> t1718 -> t1717 -> t1716 -> t1715 -> t1714 -> Control.Monad.Eff.Eff t1729 t1730
-foreign import method5 :: forall t1746 t1747 t1748 t1749 t1750 t1751 t1752. Prim.String -> t1752 -> t1751 -> t1750 -> t1749 -> t1748 -> t1747 -> t1746
-foreign import method4Eff :: forall t1777 t1778 t1779 t1780 t1781 t1790 t1791. Prim.String -> t1781 -> t1780 -> t1779 -> t1778 -> t1777 -> Control.Monad.Eff.Eff t1790 t1791
-foreign import method4 :: forall t1805 t1806 t1807 t1808 t1809 t1810. Prim.String -> t1810 -> t1809 -> t1808 -> t1807 -> t1806 -> t1805
-foreign import method3Eff :: forall t1832 t1833 t1834 t1835 t1843 t1844. Prim.String -> t1835 -> t1834 -> t1833 -> t1832 -> Control.Monad.Eff.Eff t1843 t1844
-foreign import method3 :: forall t1856 t1857 t1858 t1859 t1860. Prim.String -> t1860 -> t1859 -> t1858 -> t1857 -> t1856
-foreign import method2Eff :: forall t1879 t1880 t1881 t1888 t1889. Prim.String -> t1881 -> t1880 -> t1879 -> Control.Monad.Eff.Eff t1888 t1889
-foreign import method2 :: forall t1899 t1900 t1901 t1902. Prim.String -> t1902 -> t1901 -> t1900 -> t1899
-foreign import method1Eff :: forall t1918 t1919 t1925 t1926. Prim.String -> t1919 -> t1918 -> Control.Monad.Eff.Eff t1925 t1926
-foreign import method1 :: forall t1934 t1935 t1936. Prim.String -> t1936 -> t1935 -> t1934
-foreign import method0Eff :: forall t1949 t1954 t1955. Prim.String -> t1949 -> Control.Monad.Eff.Eff t1954 t1955
-foreign import method0 :: forall t1961 t1962. Prim.String -> t1962 -> t1961
+foreign import setter :: forall t1765 t1766 t1767. Prim.String -> t1767 -> t1766 -> t1765
+foreign import modifier :: forall t1780 t1781 t1782. Prim.String -> t1782 -> t1781 -> t1780
+foreign import getter :: forall t2163 t2164. Prim.String -> t2164 -> t2163
+foreign import method5Eff :: forall t1800 t1801 t1802 t1803 t1804 t1805 t1815 t1816. Prim.String -> t1805 -> t1804 -> t1803 -> t1802 -> t1801 -> t1800 -> Control.Monad.Eff.Eff t1815 t1816
+foreign import method5 :: forall t1832 t1833 t1834 t1835 t1836 t1837 t1838. Prim.String -> t1838 -> t1837 -> t1836 -> t1835 -> t1834 -> t1833 -> t1832
+foreign import method4Eff :: forall t1863 t1864 t1865 t1866 t1867 t1876 t1877. Prim.String -> t1867 -> t1866 -> t1865 -> t1864 -> t1863 -> Control.Monad.Eff.Eff t1876 t1877
+foreign import method4 :: forall t1891 t1892 t1893 t1894 t1895 t1896. Prim.String -> t1896 -> t1895 -> t1894 -> t1893 -> t1892 -> t1891
+foreign import method3Eff :: forall t1918 t1919 t1920 t1921 t1929 t1930. Prim.String -> t1921 -> t1920 -> t1919 -> t1918 -> Control.Monad.Eff.Eff t1929 t1930
+foreign import method3 :: forall t1942 t1943 t1944 t1945 t1946. Prim.String -> t1946 -> t1945 -> t1944 -> t1943 -> t1942
+foreign import method2Eff :: forall t1965 t1966 t1967 t1974 t1975. Prim.String -> t1967 -> t1966 -> t1965 -> Control.Monad.Eff.Eff t1974 t1975
+foreign import method2 :: forall t1985 t1986 t1987 t1988. Prim.String -> t1988 -> t1987 -> t1986 -> t1985
+foreign import method1Eff :: forall t2004 t2005 t2011 t2012. Prim.String -> t2005 -> t2004 -> Control.Monad.Eff.Eff t2011 t2012
+foreign import method1 :: forall t2020 t2021 t2022. Prim.String -> t2022 -> t2021 -> t2020
+foreign import method0Eff :: forall t2035 t2040 t2041. Prim.String -> t2035 -> Control.Monad.Eff.Eff t2040 t2041
+foreign import method0 :: forall t2047 t2048. Prim.String -> t2048 -> t2047
 module Debug.Trace where
 import Debug.Trace ()
 import Prelude ()
@@ -258,6 +303,16 @@ import Control.Monad.Eff ()
 foreign import data Trace :: !
 foreign import print :: forall a r. (Prelude.Show a) => a -> Control.Monad.Eff.Eff (trace :: Debug.Trace.Trace | r) Prelude.Unit
 foreign import trace :: forall r. Prim.String -> Control.Monad.Eff.Eff (trace :: Debug.Trace.Trace | r) Prelude.Unit
+module Rx.Concurrency.Scheduler where
+import Prelude ()
+import Data.Foreign.OOFFI ()
+import Prim ()
+import Prelude ()
+import Data.Foreign.OOFFI ()
+import Control.Monad.Eff ()
+foreign import data Schedule :: !
+foreign import data Scheduler :: *
+foreign import scheduleRecursive :: forall a e. (a -> Control.Monad.Eff.Eff e Prelude.Unit) -> Rx.Concurrency.Scheduler.Scheduler -> Control.Monad.Eff.Eff e Prelude.Unit
 module Rx.Observable where
 import Rx.Observable ()
 import Prelude ()
@@ -347,14 +402,6 @@ foreign import itAsync :: forall a eff. Prim.String -> (Test.Mocha.DoneToken -> 
 foreign import it :: Test.Mocha.DoIt
 foreign import itIsNot :: forall eff. Test.Mocha.DoneToken -> Control.Monad.Eff.Eff (done :: Test.Mocha.Done | eff) Prelude.Unit
 foreign import itIs :: forall eff. Test.Mocha.DoneToken -> Control.Monad.Eff.Eff (done :: Test.Mocha.Done | eff) Prelude.Unit
-module Main where
-import Test.Mocha ()
-import Test.Chai ()
-import Prim ()
-import Prelude ()
-import Test.Chai ()
-import Test.Mocha ()
-foreign import main :: forall t2590. Control.Monad.Eff.Eff (chai :: Test.Chai.Chai, it :: Test.Mocha.It, describe :: Test.Mocha.Describe | t2590) Prelude.Unit
 module Control.Monad where
 import Prelude ()
 import Control.Monad ()
@@ -864,6 +911,122 @@ foreign import instance comonadTuple :: Control.Comonad.Comonad (Data.Tuple.Tupl
 foreign import instance lazyTuple :: (Control.Lazy.Lazy a, Control.Lazy.Lazy b) => Control.Lazy.Lazy (Data.Tuple.Tuple a b)
 foreign import instance lazyLazy1Tuple :: (Control.Lazy.Lazy1 l1, Control.Lazy.Lazy1 l2) => Control.Lazy.Lazy (Data.Tuple.Tuple (l1 a) (l2 b))
 foreign import instance lazyLazy2Tuple :: (Control.Lazy.Lazy2 l1, Control.Lazy.Lazy2 l2) => Control.Lazy.Lazy (Data.Tuple.Tuple (l1 a b) (l2 c d))
+module Data.Enum where
+import Data.Enum ()
+import Data.Maybe ()
+import Prelude ()
+import Data.Char ()
+import Prim ()
+import Prelude ()
+import Data.Maybe ()
+import Data.Either ()
+import Data.Tuple ()
+import Data.Char ()
+import Data.Maybe.Unsafe ()
+newtype Cardinality (a :: *) = Cardinality Prim.Number
+class (Prelude.Ord a) <= Enum a where
+  cardinality :: Data.Enum.Cardinality a
+  firstEnum :: a
+  lastEnum :: a
+  succ :: a -> Data.Maybe.Maybe a
+  pred :: a -> Data.Maybe.Maybe a
+foreign import toEnum :: forall a. (Data.Enum.Enum a) => Prim.Number -> Data.Maybe.Maybe a
+foreign import runCardinality :: forall a. Data.Enum.Cardinality a -> Prim.Number
+foreign import fromEnum :: forall a. (Data.Enum.Enum a) => a -> Prim.Number
+foreign import instance enumChar :: Data.Enum.Enum Data.Char.Char
+foreign import instance enumMaybe :: (Data.Enum.Enum a) => Data.Enum.Enum (Data.Maybe.Maybe a)
+foreign import instance enumBoolean :: Data.Enum.Enum Prim.Boolean
+foreign import instance enumTuple :: (Data.Enum.Enum a, Data.Enum.Enum b) => Data.Enum.Enum (Data.Tuple.Tuple a b)
+foreign import instance enumEither :: (Data.Enum.Enum a, Data.Enum.Enum b) => Data.Enum.Enum (Data.Either.Either a b)
+module Data.Date where
+import Data.Date ()
+import Prelude ()
+import Data.Enum ()
+import Global ()
+import Data.Maybe.Unsafe ()
+import Data.Function ()
+import Prim ()
+import Prelude ()
+import Control.Monad.Eff ()
+import Data.Enum ()
+import Data.Maybe ()
+import Data.Function ()
+import Data.Maybe.Unsafe ()
+type Milliseconds = Prim.Number
+type Seconds = Prim.Number
+type Minutes = Prim.Number
+type Hours = Prim.Number
+data DayOfWeek
+type Day = Prim.Number
+data Month = January  | February  | March  | April  | May  | June  | July  | August  | September  | October  | November  | December 
+type Year = Prim.Number
+data Date
+foreign import data Now :: !
+foreign import data JSDate :: *
+foreign import fromStringStrict :: Prim.String -> Data.Maybe.Maybe Data.Date.Date
+foreign import fromString :: Prim.String -> Data.Maybe.Maybe Data.Date.Date
+foreign import fromEpochMilliseconds :: Data.Date.Milliseconds -> Data.Maybe.Maybe Data.Date.Date
+foreign import toEpochMilliseconds :: Data.Date.Date -> Data.Date.Milliseconds
+foreign import timezoneOffset :: Data.Date.Date -> Data.Date.Minutes
+foreign import millisecondUTC :: Data.Date.Date -> Data.Date.Seconds
+foreign import millisecond :: Data.Date.Date -> Data.Date.Seconds
+foreign import secondUTC :: Data.Date.Date -> Data.Date.Seconds
+foreign import second :: Data.Date.Date -> Data.Date.Seconds
+foreign import minuteUTC :: Data.Date.Date -> Data.Date.Minutes
+foreign import minute :: Data.Date.Date -> Data.Date.Minutes
+foreign import hourUTC :: Data.Date.Date -> Data.Date.Hours
+foreign import hour :: Data.Date.Date -> Data.Date.Hours
+foreign import dayOfWeekUTC :: Data.Date.Date -> Data.Date.DayOfWeek
+foreign import dayOfWeek :: Data.Date.Date -> Data.Date.DayOfWeek
+foreign import dayUTC :: Data.Date.Date -> Data.Date.Day
+foreign import day :: Data.Date.Date -> Data.Date.Day
+foreign import monthUTC :: Data.Date.Date -> Data.Date.Month
+foreign import month :: Data.Date.Date -> Data.Date.Month
+foreign import yearUTC :: Data.Date.Date -> Data.Date.Year
+foreign import year :: Data.Date.Date -> Data.Date.Year
+foreign import date :: Data.Date.Year -> Data.Date.Month -> Data.Date.Day -> Data.Maybe.Maybe Data.Date.Date
+foreign import dateTime :: Data.Date.Year -> Data.Date.Month -> Data.Date.Day -> Data.Date.Hours -> Data.Date.Minutes -> Data.Date.Seconds -> Data.Date.Milliseconds -> Data.Maybe.Maybe Data.Date.Date
+foreign import now :: forall e. Control.Monad.Eff.Eff (now :: Data.Date.Now | e) Data.Date.Date
+foreign import toJSDate :: Data.Date.Date -> Data.Date.JSDate
+foreign import fromJSDate :: Data.Date.JSDate -> Data.Maybe.Maybe Data.Date.Date
+foreign import instance eqDate :: Prelude.Eq Data.Date.Date
+foreign import instance ordDate :: Prelude.Ord Data.Date.Date
+foreign import instance eqMonth :: Prelude.Eq Data.Date.Month
+foreign import instance ordMonth :: Prelude.Ord Data.Date.Month
+foreign import instance enumMonth :: Data.Enum.Enum Data.Date.Month
+foreign import instance showMonth :: Prelude.Show Data.Date.Month
+foreign import instance eqDayOfWeek :: Prelude.Eq Data.Date.DayOfWeek
+foreign import instance ordDayOfWeek :: Prelude.Ord Data.Date.DayOfWeek
+foreign import instance enumDayOfWeek :: Data.Enum.Enum Data.Date.DayOfWeek
+foreign import instance showDayOfWeek :: Prelude.Show Data.Date.DayOfWeek
+foreign import instance showDate :: Prelude.Show Data.Date.Date
+module Rx.Concurrency.Scheduler.Test where
+import Data.Date ()
+import Prelude ()
+import Test.Chai ()
+import Test.Mocha ()
+import Control.Monad.Eff.Ref ()
+import Rx.Concurrency.Scheduler.Test ()
+import Rx.Concurrency.Scheduler ()
+import Prim ()
+import Prelude ()
+import Rx.Concurrency.Scheduler ()
+import Test.Mocha ()
+import Test.Chai ()
+import Data.Date ()
+import Control.Monad.Eff ()
+import Control.Monad.Eff.Ref ()
+foreign import init :: forall t6232. Control.Monad.Eff.Eff (chai :: Test.Chai.Chai, schedule :: Rx.Concurrency.Scheduler.Schedule, ref :: Control.Monad.Eff.Ref.Ref, it :: Test.Mocha.It, describe :: Test.Mocha.Describe | t6232) Prelude.Unit
+foreign import newTestScheduler :: forall e. Prim.Number -> Control.Monad.Eff.Eff (schedule :: Rx.Concurrency.Scheduler.Schedule | e) Rx.Concurrency.Scheduler.Scheduler
+foreign import isEq :: forall a e. (Prelude.Eq a) => a -> a -> Control.Monad.Eff.Eff (chai :: Test.Chai.Chai | e) Prelude.Unit
+foreign import nowTime :: forall t6168. Control.Monad.Eff.Eff (now :: Data.Date.Now | t6168) Prim.Number
+module Main where
+import Rx.Concurrency.Scheduler.Test ()
+import Prim ()
+import Prelude ()
+import Test.Chai ()
+import Test.Mocha ()
+foreign import main :: forall t6232. Control.Monad.Eff.Eff (chai :: Test.Chai.Chai, schedule :: Rx.Concurrency.Scheduler.Schedule, ref :: Control.Monad.Eff.Ref.Ref, it :: Test.Mocha.It, describe :: Test.Mocha.Describe | t6232) Prelude.Unit
 module Data.Tuple.Nested where
 import Prim ()
 import Prelude ()
@@ -947,6 +1110,65 @@ foreign import instance ordLast :: (Prelude.Ord a) => Prelude.Ord (Data.Monoid.L
 foreign import instance showLast :: (Prelude.Show a) => Prelude.Show (Data.Monoid.Last.Last a)
 foreign import instance semigroupLast :: Prelude.Semigroup (Data.Monoid.Last.Last a)
 foreign import instance monoidLast :: Data.Monoid.Monoid (Data.Monoid.Last.Last a)
+module Data.String where
+import Data.Function ()
+import Data.String ()
+import Data.Char ()
+import Data.String.Unsafe ()
+import Prim ()
+import Prelude ()
+import Data.Maybe ()
+import Data.Char ()
+import Data.Function ()
+import Data.String.Unsafe ()
+foreign import joinWith :: Prim.String -> [Prim.String] -> Prim.String
+foreign import trim :: Prim.String -> Prim.String
+foreign import toUpper :: Prim.String -> Prim.String
+foreign import toLower :: Prim.String -> Prim.String
+foreign import toCharArray :: Prim.String -> [Data.Char.Char]
+foreign import split :: Prim.String -> Prim.String -> [Prim.String]
+foreign import dropWhile :: (Data.Char.Char -> Prim.Boolean) -> Prim.String -> Prim.String
+foreign import drop :: Prim.Number -> Prim.String -> Prim.String
+foreign import takeWhile :: (Data.Char.Char -> Prim.Boolean) -> Prim.String -> Prim.String
+foreign import take :: Prim.Number -> Prim.String -> Prim.String
+foreign import count :: (Data.Char.Char -> Prim.Boolean) -> Prim.String -> Prim.Number
+foreign import replace :: Prim.String -> Prim.String -> Prim.String -> Prim.String
+foreign import localeCompare :: Prim.String -> Prim.String -> Prim.Number
+foreign import singleton :: Data.Char.Char -> Prim.String
+foreign import length :: Prim.String -> Prim.Number
+foreign import uncons :: Prim.String -> Data.Maybe.Maybe { tail :: Prim.String, head :: Data.Char.Char }
+foreign import null :: Prim.String -> Prim.Boolean
+foreign import lastIndexOf' :: Prim.String -> Prim.Number -> Prim.String -> Prim.Number
+foreign import lastIndexOf :: Prim.String -> Prim.String -> Prim.Number
+foreign import indexOf' :: Prim.String -> Prim.Number -> Prim.String -> Prim.Number
+foreign import indexOf :: Prim.String -> Prim.String -> Prim.Number
+foreign import fromChar :: Data.Char.Char -> Prim.String
+foreign import fromCharArray :: [Data.Char.Char] -> Prim.String
+foreign import charCodeAt :: Prim.Number -> Prim.String -> Data.Maybe.Maybe Prim.Number
+foreign import charAt :: Prim.Number -> Prim.String -> Data.Maybe.Maybe Data.Char.Char
+module Data.String.Regex where
+import Data.String.Regex ()
+import Data.String ()
+import Data.Function ()
+import Prim ()
+import Prelude ()
+import Data.Function ()
+import Data.Maybe ()
+import Data.String ()
+type RegexFlags = { unicode :: Prim.Boolean, sticky :: Prim.Boolean, multiline :: Prim.Boolean, ignoreCase :: Prim.Boolean, global :: Prim.Boolean }
+foreign import data Regex :: *
+foreign import split :: Data.String.Regex.Regex -> Prim.String -> [Prim.String]
+foreign import search :: Data.String.Regex.Regex -> Prim.String -> Prim.Number
+foreign import replace' :: Data.String.Regex.Regex -> (Prim.String -> [Prim.String] -> Prim.String) -> Prim.String -> Prim.String
+foreign import replace :: Data.String.Regex.Regex -> Prim.String -> Prim.String -> Prim.String
+foreign import match :: Data.String.Regex.Regex -> Prim.String -> Data.Maybe.Maybe [Prim.String]
+foreign import test :: Data.String.Regex.Regex -> Prim.String -> Prim.Boolean
+foreign import parseFlags :: Prim.String -> Data.String.Regex.RegexFlags
+foreign import renderFlags :: Data.String.Regex.RegexFlags -> Prim.String
+foreign import flags :: Data.String.Regex.Regex -> Data.String.Regex.RegexFlags
+foreign import source :: Data.String.Regex.Regex -> Prim.String
+foreign import regex :: Prim.String -> Data.String.Regex.RegexFlags -> Data.String.Regex.Regex
+foreign import instance showRegex :: Prelude.Show Data.String.Regex.Regex
 module Data.Traversable where
 import Prelude ()
 import Data.Traversable ()
