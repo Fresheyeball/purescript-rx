@@ -2,6 +2,7 @@ module Rx.Observable where
 
 import Prelude
 import Control.Monad.Eff
+import Data.Foreign.OOFFI
 import DOM
 
 foreign import data Observable :: * -> *
@@ -16,40 +17,27 @@ instance applicativeObservable :: Applicative Observable where
   pure = just
 
 instance observableBind :: Bind Observable where
-  (>>=) = flatMap
+  (>>=) = fmap
 
 instance monadObservable :: Monad Observable
 
 instance semigroupObservable :: Semigroup (Observable a) where
   (<>) = concat
 
-foreign import just
-  """
-  function just(x) {
-    return Rx.Observable.just(x);
-  }
-  """ :: forall a. a -> Observable a
 
-foreign import fromArray
-  """
-  function fromArray(xs) {
-    return Rx.Observable.fromArray(xs);
-  }
-  """ :: forall a. [a] -> Observable a
+foreign import data RXObservable :: *
+foreign import observable "var observable = Rx.Observable;" :: RXObservable
 
-foreign import empty
-  """
-  var empty = (function () {
-    if (!Rx) {
-      return {};
-    } else {
-      return Rx.Observable.empty();
-    }
-  }());
-  """ :: forall a. Observable a
+just :: forall a. a -> Observable a
+just = method1 "just" observable
 
-foreign import subscribe
-  """
+fromArray :: forall a. [a] -> Observable a
+fromArray = method1 "fromArray" observable
+
+empty :: forall a. Observable a
+empty = method0 "empty" observable
+
+foreign import subscribe """
   function subscribe(ob) {
     return function(f) {
       return function() {
@@ -61,17 +49,10 @@ foreign import subscribe
   }
   """ :: forall eff a. Observable a -> (a -> Eff eff Unit) -> Eff eff Unit
 
-foreign import merge
-  """
-  function merge(ob) {
-    return function(other) {
-      return ob.merge(other);
-    }
-  }
-  """ :: forall a. Observable a -> Observable a -> Observable a
+merge :: forall a. Observable a -> Observable a -> Observable a
+merge = method1 "merge"
 
-foreign import combineLatest
-  """
+foreign import combineLatest """
   function combineLatest(f) {
     return function(ob1) {
       return function(ob2) {
@@ -83,53 +64,22 @@ foreign import combineLatest
   }
   """ :: forall a b c. (a -> b -> c) -> Observable a -> Observable b -> Observable c
 
-foreign import concat
-  """
-  function concat(x) {
-    return function(y) {
-      return x.concat(y);
-    };
-  };
-  """ :: forall a. Observable a -> Observable a -> Observable a
+concat :: forall a. Observable a -> Observable a -> Observable a
+concat = method1 "concat"
 
-foreign import take
-  """
-  function take(n) {
-    return function(ob) {
-      return ob.take(n);
-    };
-  }
-  """ :: forall a. Number -> Observable a -> Observable a
+take :: forall a. Number -> Observable a -> Observable a
+take = flip $ method1 "take"
 
-foreign import takeUntil
-  """
-  function takeUntil(other) {
-    return function(ob) {
-      return ob.takeUntil(other);
-    };
-  }
-  """ :: forall a b. Observable b -> Observable a -> Observable a
+takeUntil :: forall a b. Observable b -> Observable a -> Observable a
+takeUntil = flip $ method1 "takeUntil"
 
-foreign import map
-  """
-  function map(f) {
-    return function(ob) {
-      return ob.map(f);
-    }
-  }
-  """ :: forall a b. (a -> b) -> Observable a -> Observable b
+map :: forall a b. (a -> b) -> Observable a -> Observable b
+map = flip $ method1 "map"
 
-foreign import flatMap
-  """
-  function flatMap(ob) {
-    return function(f) {
-      return ob.flatMap(f);
-    }
-  }
-  """ :: forall a b. Observable a -> (a -> Observable b) -> Observable b
+fmap :: forall a b. Observable a -> (a -> Observable b) -> Observable b
+fmap = method1 "flatMap"
 
-foreign import scan
-  """
+foreign import scan """
   function scan(ob) {
     return function(f) {
       return function(seed) {
@@ -141,8 +91,7 @@ foreign import scan
   }
   """ :: forall a b. Observable a -> (a -> b -> b) -> b -> Observable b
 
-foreign import unwrap
-  """
+foreign import unwrap """
   function unwrap(ob) {
     return function() {
       return ob.map(function(eff) {
@@ -152,18 +101,8 @@ foreign import unwrap
   }
   """ :: forall eff a. Observable (Eff eff a) -> Eff eff (Observable a)
 
-foreign import switchLatest
-  """
-  function switchLatest(ob) {
-    return ob.switchLatest();
-  }
-  """ :: forall a. Observable (Observable a) -> Observable a
+switchLatest :: forall a. Observable (Observable a) -> Observable a
+switchLatest = method0 "switchLatest"
 
-foreign import debounce
-  """
-  function debounce(ms) {
-    return function(ob) {
-      return ob.debounce(ms);
-    };
-  }
-  """ :: forall a. Number -> Observable a -> Observable a
+debounce :: forall a. Number -> Observable a -> Observable a
+debounce = flip $ method1 "debounce"

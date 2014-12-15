@@ -1,4 +1,6 @@
 bower_components/
+node_modules/
+externs.purs
 output/
 .psci
 .psci_modules/
